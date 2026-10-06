@@ -53,7 +53,30 @@ This guide explains how to deploy **FreshCart** to the internet for free so anyo
 
 ---
 
-## Step 3A: Deploy on Vercel (Recommended)
+### Method 1: Using the Vercel Command Line (Fastest & Automated) ⚡
+
+I have already installed **Node.js** and **Vercel CLI** on your system and created a one-click deployment script!
+
+1. **Option A (One-Click)**: Simply double-click **`deploy_vercel.bat`** in your project folder.
+2. **Option B (Terminal)**: Open PowerShell or Command Prompt in `e:\grocery store web application` and run:
+   ```bash
+   vercel --prod
+   ```
+3. Follow the 3-step prompt:
+   * *Set up and deploy?* Press **Y** (Enter).
+   * *Which scope?* Select your personal account (Enter).
+   * *Link to existing project?* Type **N** (Enter).
+   * *What's your project's name?* Press **Enter** (defaults to `grocery-store-web-application` or type `freshcart`).
+   * *In which directory is your code located?* Press **Enter** (`./`).
+   * *Want to modify settings?* Type **N** (Enter).
+4. Vercel CLI will immediately upload your code and output your live production URL:
+   ```text
+   Production: https://freshcart-xxx.vercel.app [copied to clipboard]
+   ```
+
+---
+
+### Method 2: Via GitHub + Vercel Dashboard (Web UI)
 
 1. Go to [vercel.com](https://vercel.com) and log in with your **GitHub** account.
 2. On your Vercel dashboard, click **Add New...** → **Project**.
