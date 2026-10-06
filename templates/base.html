@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}FreshCart - Daily Fresh Groceries Delivered{% endblock %}</title>
+    <meta name="description" content="Shop daily farm-fresh fruits, vegetables, dairy, grains, and pantry essentials online at FreshCart. Fast delivery right to your door.">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🥬</text></svg>">
+</head>
+<body>
+
+    <!-- NAVIGATION BAR -->
+    <header class="navbar">
+        <div class="nav-container">
+            <!-- Brand Logo -->
+            <a href="/" class="brand-logo" id="nav-brand-logo">
+                <div class="brand-icon">🛒</div>
+                <span class="brand-name">Fresh<span>Cart</span></span>
+            </a>
+
+            <!-- Search Bar in Navbar -->
+            <form class="nav-search" id="nav-search-form" action="/products" method="GET">
+                <span class="nav-search-icon">🔍</span>
+                <input 
+                    type="text" 
+                    id="nav-search-input" 
+                    name="search" 
+                    placeholder="Search fresh veggies, fruits, milk, flour, rice..." 
+                    autocomplete="off"
+                />
+            </form>
+
+            <!-- Navigation Links & Actions -->
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="/" class="nav-link {% if request.path == '/' %}active{% endif %}">Home</a></li>
+                    <li><a href="/products" class="nav-link {% if request.path == '/products' %}active{% endif %}">Products</a></li>
+                    <li><a href="/orders" class="nav-link {% if request.path == '/orders' %}active{% endif %}">Orders</a></li>
+                    <li><a href="/admin" class="nav-link {% if request.path == '/admin' %}active{% endif %}" style="color: #047857; font-weight: 700;">⚙️ Admin</a></li>
+                    
+                    <!-- Cart Button with Live Counter Badge -->
+                    <li>
+                        <a href="/cart" class="cart-btn" id="nav-cart-btn" title="View Shopping Cart">
+                            <svg width="18" height="18" fill="currentColor" viewBox="0 0 16 16"><path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/></svg>
+                            <span>Cart</span>
+                            <span class="cart-badge" id="nav-cart-count" style="display:none;">0</span>
+                        </a>
+                    </li>
+
+                    <!-- User Account / Login State Container -->
+                    <li id="nav-user-container">
+                        <a href="/auth" class="user-btn">
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/></svg>
+                            <span>Login</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- MAIN PAGE CONTENT -->
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-col">
+                <a href="/" class="brand-logo" style="margin-bottom: 0.75rem;">
+                    <div class="brand-icon">🛒</div>
+                    <span class="brand-name">Fresh<span>Cart</span></span>
+                </a>
+                <p style="color: var(--text-muted); font-size: 0.88rem; max-width: 320px;">
+                    Your trusted neighborhood grocery store. Quality tested, responsibly sourced, and delivered fast to your doorstep.
+                </p>
+            </div>
+            
+            <div class="footer-col">
+                <h4>Quick Links</h4>
+                <ul class="footer-links">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/products">All Products</a></li>
+                    <li><a href="/cart">My Cart</a></li>
+                    <li><a href="/orders">Order History</a></li>
+                    <li><a href="/admin">⚙️ Admin Panel</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Categories</h4>
+                <ul class="footer-links">
+                    <li><a href="/products?category=Fruits%20%26%20Vegetables">Fruits & Vegetables</a></li>
+                    <li><a href="/products?category=Dairy%20%26%20Eggs">Dairy & Eggs</a></li>
+                    <li><a href="/products?category=Grains%20%26%20Flour">Grains & Flour</a></li>
+                    <li><a href="/products?category=Bakery%20%26%20Snacks">Bakery & Snacks</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Customer Support</h4>
+                <ul class="footer-links">
+                    <li style="color: var(--text-muted); font-size: 0.88rem;">📞 1800-FRESH-CART</li>
+                    <li style="color: var(--text-muted); font-size: 0.88rem;">✉️ support@freshcart.local</li>
+                    <li style="color: var(--text-muted); font-size: 0.88rem;">🕒 7:00 AM - 10:00 PM Daily</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div>© 2026 FreshCart Technologies Inc. All rights reserved.</div>
+            <div style="display:flex; gap: 1rem;">
+                <span>100% Organic & Fresh</span>
+                <span>•</span>
+                <span>Free Delivery Above ₹300</span>
+                <span>•</span>
+                <span>Cash on Delivery Available</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast Notifications Container -->
+    <div id="toast-container"></div>
+
+    <!-- Core Scripts -->
+    <script src="{{ url_for('static', filename='js/api.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

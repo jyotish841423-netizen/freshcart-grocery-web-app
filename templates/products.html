@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Grocery Products Catalog - FreshCart{% endblock %}
+
+{% block content %}
+<div class="section-header" style="margin-bottom: 1.25rem;">
+    <div>
+        <h1 class="section-title">All Grocery Products</h1>
+        <p class="section-subtitle" id="catalog-status-text">Browse our fresh selection of pantry goods, dairy, vegetables, and daily staples.</p>
+    </div>
+</div>
+
+<!-- CATALOG TOOLBAR: SEARCH & CATEGORY PILLS -->
+<section class="catalog-toolbar">
+    <div class="catalog-search-wrap">
+        <input 
+            type="text" 
+            id="catalog-search-input" 
+            class="catalog-search-input" 
+            placeholder="Search by product name (e.g. Milk, Rice, Tomato, Apples)..."
+        />
+        <button class="btn btn-primary" id="catalog-search-btn">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>
+            Search
+        </button>
+    </div>
+
+    <!-- Category Filter Pills -->
+    <div class="filter-pills" id="category-filter-pills">
+        <button class="filter-pill active" data-category="all">All Items</button>
+        {% for cat in categories %}
+        <button class="filter-pill" data-category="{{ cat.name }}">{{ cat.name }}</button>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- PRODUCTS GRID: POPULATED DYNAMICALLY FROM /api/products -->
+<div class="products-grid" id="catalog-products-grid">
+    <!-- Populated by products.js -->
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/products.js') }}"></script>
+{% endblock %}

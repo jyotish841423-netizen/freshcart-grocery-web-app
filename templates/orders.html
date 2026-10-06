@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}My Grocery Orders - FreshCart{% endblock %}
+
+{% block content %}
+<div class="section-header" style="margin-bottom: 1.5rem;">
+    <div>
+        <h1 class="section-title">My Orders</h1>
+        <p class="section-subtitle">Track your recent grocery deliveries and order status.</p>
+    </div>
+    <a href="/products" class="btn btn-secondary btn-sm">+ Order More Groceries</a>
+</div>
+
+<!-- DYNAMIC ORDERS CONTAINER -->
+<div id="orders-list-container">
+    <div style="text-align: center; padding: 3rem; color: var(--text-muted);">
+        <p>Loading your orders...</p>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/orders.js') }}"></script>
+{% endblock %}

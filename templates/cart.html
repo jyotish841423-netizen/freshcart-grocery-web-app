@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}My Shopping Cart - FreshCart{% endblock %}
+
+{% block content %}
+<div class="section-header" style="margin-bottom: 1.5rem;">
+    <div>
+        <h1 class="section-title">My Cart</h1>
+        <p class="section-subtitle">Review items in your grocery basket and proceed to checkout.</p>
+    </div>
+</div>
+
+<!-- DYNAMIC CART CONTAINER: Managed by cart.js -->
+<div id="cart-content-wrapper">
+    <div style="text-align: center; padding: 3rem; color: var(--text-muted);">
+        <p>Loading cart items...</p>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/cart.js') }}"></script>
+{% endblock %}
