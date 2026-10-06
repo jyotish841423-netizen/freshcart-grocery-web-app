@@ -4,8 +4,9 @@ This guide explains how to deploy **FreshCart** to the internet for free so anyo
 
 ---
 
-## 🚀 Recommended Free Cloud Stack:
-* **Web Hosting**: [Render.com](https://render.com) (Free Python Web Service)
+## 🚀 Recommended Cloud Platforms:
+* **Option A: [Vercel](https://vercel.com)** (Instant, Serverless, Super Fast)
+* **Option B: [Render.com](https://render.com)** (Standard Python Web Service)
 * **Database**: [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) (Free 512MB Cloud MongoDB Cluster)
 * **Code Repository**: [GitHub](https://github.com)
 
@@ -52,7 +53,31 @@ This guide explains how to deploy **FreshCart** to the internet for free so anyo
 
 ---
 
-## Step 3: Deploy on Render.com (Free)
+## Step 3A: Deploy on Vercel (Recommended)
+
+1. Go to [vercel.com](https://vercel.com) and log in with your **GitHub** account.
+2. On your Vercel dashboard, click **Add New...** → **Project**.
+3. Under **Import Git Repository**, find your `freshcart` repository and click **Import**.
+4. In the project settings:
+   * **Framework Preset**: Leave as **Other** (Vercel automatically detects Python via `vercel.json` and `api/index.py`).
+   * **Root Directory**: `./` (default)
+5. **Environment Variables** (Optional, for Cloud MongoDB):
+   * Expand **Environment Variables**:
+     * Name: `MONGO_URI`
+     * Value: *Your MongoDB Atlas connection string from Step 2*
+     * Name: `SECRET_KEY`
+     * Value: `freshcart-secret-key-production`
+   *(If not provided, FreshCart runs with its built-in in-memory database mock).*
+6. Click **Deploy**.
+7. In about 30–60 seconds, Vercel will complete the build and give you your live URL:
+   ```text
+   https://freshcart-xxx.vercel.app
+   ```
+   🎉 **You can now share this URL with anyone!**
+
+---
+
+## Step 3B: Deploy on Render.com (Alternative)
 
 1. Sign up / Log in to [render.com](https://render.com) using your GitHub account.
 2. Click the **New +** button in the dashboard and select **Web Service**.
