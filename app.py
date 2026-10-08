@@ -13,6 +13,7 @@ from db import users_col, products_col, cart_col, orders_col, doc_to_dict
 from seed_data import CATEGORIES, SAMPLE_PRODUCTS
 
 import os
+from urllib.parse import parse_qs, urlencode
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
 app = Flask(
@@ -21,6 +22,37 @@ app = Flask(
     static_folder=os.path.join(BASE_DIR, 'static')
 )
 app.config.from_object(Config)
+
+
+class VercelRouterMiddleware:
+    """
+    WSGI middleware for Vercel Serverless deployments.
+    Extracts the user's intended route from Vercel's rewrite query parameter
+    (?path=... or ?__route__=...) and sets environ['PATH_INFO'] accordingly.
+    """
+    def __init__(self, wsgi_app):
+        self.wsgi_app = wsgi_app
+
+    def __call__(self, environ, start_response):
+        query = environ.get('QUERY_STRING', '')
+        if 'path=' in query or '__route__' in query:
+            params = parse_qs(query)
+            route_val = (
+                params.pop('path', [None])[0]
+                or params.pop('__route__', [None])[0]
+            )
+            if route_val is not None:
+                cleaned = '/' + route_val.strip().lstrip('/')
+                environ['PATH_INFO'] = cleaned if cleaned else '/'
+                environ['QUERY_STRING'] = urlencode(params, doseq=True)
+        elif environ.get('PATH_INFO') in ('/api/index', '/api/index.py'):
+            environ['PATH_INFO'] = '/'
+
+        return self.wsgi_app(environ, start_response)
+
+
+# Wrap Flask WSGI app with Vercel router middleware
+app.wsgi_app = VercelRouterMiddleware(app.wsgi_app)
 
 
 # ==============================================================================
@@ -579,18 +611,6 @@ def get_order_by_id(order_id):
         od['created_at'] = od['created_at'].strftime("%b %d, %Y - %I:%M %p")
 
     return jsonify({'success': True, 'order': od}), 200
-
-
-@app.errorhandler(404)
-def not_found_debugger(e):
-    return jsonify({
-        'error': '404_not_found',
-        'request_path': request.path,
-        'environ_PATH_INFO': request.environ.get('PATH_INFO'),
-        'environ_QUERY_STRING': request.environ.get('QUERY_STRING'),
-        'environ_HTTP_X_FORWARDED_URI': request.environ.get('HTTP_X_FORWARDED_URI'),
-        'environ_HTTP_X_INVOKE_PATH': request.environ.get('HTTP_X_INVOKE_PATH'),
-    }), 404
 
 
 # ==============================================================================
