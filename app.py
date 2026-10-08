@@ -28,6 +28,8 @@ app.config.from_object(Config)
 # ==============================================================================
 
 @app.route('/')
+@app.route('/api/index')
+@app.route('/api/index.py')
 def home():
     """Renders the Home page."""
     return render_template('index.html', categories=CATEGORIES)
