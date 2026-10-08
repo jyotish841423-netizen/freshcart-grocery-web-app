@@ -7,22 +7,35 @@ root_dir = os.path.abspath(os.path.join(current_dir, ".."))
 if root_dir not in sys.path:
     sys.path.insert(0, root_dir)
 
+from urllib.parse import urlparse
 from app import app
 
 
 class VercelRouterMiddleware:
     """
     WSGI middleware to normalize URL path on Vercel Serverless Functions.
-    Vercel rewrites often deliver requests with the function prefix (e.g. /api/index.py or /api/index),
-    which causes Flask to return a 404 because those routes do not exist.
+    Vercel rewrites incoming URLs to /api/index, putting the original path in
+    HTTP_X_FORWARDED_URI or HTTP_X_INVOKE_PATH.
     """
     def __init__(self, wsgi_app):
         self.wsgi_app = wsgi_app
 
     def __call__(self, environ, start_response):
-        path = environ.get('PATH_INFO', '')
+        # 1. Check Vercel proxy headers for the true requested URL
+        orig_uri = (
+            environ.get('HTTP_X_FORWARDED_URI')
+            or environ.get('HTTP_X_INVOKE_PATH')
+            or environ.get('x-forwarded-uri')
+        )
+        if orig_uri:
+            parsed = urlparse(orig_uri)
+            if parsed.path:
+                environ['PATH_INFO'] = parsed.path
+            if parsed.query:
+                environ['QUERY_STRING'] = parsed.query
 
-        # Strip /api/index.py or /api/index prefix
+        # 2. If PATH_INFO is still /api/index or /api/index.py, normalize to /
+        path = environ.get('PATH_INFO', '')
         for prefix in ('/api/index.py', '/api/index'):
             if path == prefix:
                 environ['PATH_INFO'] = '/'
