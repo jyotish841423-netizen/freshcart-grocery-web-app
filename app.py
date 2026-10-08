@@ -581,6 +581,18 @@ def get_order_by_id(order_id):
     return jsonify({'success': True, 'order': od}), 200
 
 
+@app.errorhandler(404)
+def not_found_debugger(e):
+    return jsonify({
+        'error': '404_not_found',
+        'request_path': request.path,
+        'environ_PATH_INFO': request.environ.get('PATH_INFO'),
+        'environ_QUERY_STRING': request.environ.get('QUERY_STRING'),
+        'environ_HTTP_X_FORWARDED_URI': request.environ.get('HTTP_X_FORWARDED_URI'),
+        'environ_HTTP_X_INVOKE_PATH': request.environ.get('HTTP_X_INVOKE_PATH'),
+    }), 404
+
+
 # ==============================================================================
 # MAIN ENTRY POINT
 # ==============================================================================
