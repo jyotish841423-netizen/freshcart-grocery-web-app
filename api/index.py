@@ -25,15 +25,13 @@ class VercelRouterMiddleware:
 
         # 1. Check if Vercel rewrite passed the route via query string
         query = environ.get('QUERY_STRING', '')
-        if '__route__' in query:
+        if '__route__' in query or 'path=' in query:
             params = parse_qs(query)
-            route_val = params.pop('__route__', [None])[0]
-            if route_val:
-                # Clean up path (e.g. "//" -> "/")
-                while route_val.startswith('//'):
-                    route_val = route_val[1:]
-                target_path = route_val if route_val else '/'
-                # Restore remaining user query params without __route__
+            route_val = params.pop('__route__', [None])[0] or params.pop('path', [None])[0]
+            if route_val is not None:
+                cleaned = '/' + route_val.strip().lstrip('/')
+                target_path = cleaned if cleaned else '/'
+                # Restore remaining user query params without routing keys
                 environ['QUERY_STRING'] = urlencode(params, doseq=True)
 
         # 2. Check Vercel proxy headers if query parameter wasn't present
